@@ -1,11 +1,7 @@
 const express = require("express");
 
 const { authenticate, validation, isValidId } = require("../../middlewares");
-const {
-  joiSchema,
-  statusJoiSchema,
-  joiSubscriptionSchema,
-} = require("../../models/contact");
+const { joiSchema, statusJoiSchema } = require("../../models/contact");
 const { contacts: ctrl } = require("../../controllers");
 const { ctrlWrapper } = require("../../helpers");
 
@@ -34,13 +30,6 @@ router.patch(
   isValidId,
   validation(statusJoiSchema),
   ctrlWrapper(ctrl.updateStatusContact)
-);
-
-router.patch(
-  "/",
-  authenticate,
-  validation(joiSubscriptionSchema),
-  ctrlWrapper(ctrl.updateSubscription)
 );
 
 router.delete("/:contactId", isValidId, ctrlWrapper(ctrl.removeContact));

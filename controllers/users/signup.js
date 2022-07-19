@@ -1,4 +1,6 @@
 const { createError } = require("../../helpers");
+const gravatar = require("gravatar");
+
 const { User } = require("../../models");
 
 const signup = async (req, res) => {
@@ -7,7 +9,8 @@ const signup = async (req, res) => {
   if (user) {
     throw createError(409, "Email in use");
   }
-  const newUser = new User({ email, subscription });
+  const avatarURL = gravatar.url(email);
+  const newUser = new User({ email, subscription, avatarURL });
   newUser.setPassword(password);
   newUser.save();
   res.status(201).json({
@@ -15,8 +18,9 @@ const signup = async (req, res) => {
     code: 201,
     data: {
       user: {
-        email: newUser.email,
+        email,
         subscription: newUser.subscription,
+        avatarURL,
       },
     },
   });
